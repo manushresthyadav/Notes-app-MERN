@@ -1,11 +1,21 @@
 const express=require('express')
+const dotenv=require('dotenv')
 const notes=require('./data/notes.js')
+
 const app=express()
+dotenv.config();
+
 app.get('/',(req,res)=>{
     res.send('Success')
 })
 app.get('/api/notes',(req,res)=>{
 res.json(notes)
 })
+app.get('/api/notes/:id',(req,res)=>{
+    const note=notes.find((n)=>n._id===req.params.id)
+    // console.log(req.params)
+    res.json(note)
+})
 // creating server 
-app.listen(5000,console.log('server started at port 5000'))
+const PORT=process.env.PORT || 5000;
+app.listen(PORT,console.log(`server started at PORT ${PORT}`))
