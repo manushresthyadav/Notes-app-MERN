@@ -20,5 +20,4 @@ const MainScreen = ({title,children}) => {
     </div>
   )
 }
-
 export default MainScreen
