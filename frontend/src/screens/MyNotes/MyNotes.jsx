@@ -1,9 +1,9 @@
 import React from 'react'
 import MainScreen from '../../components/MainScreen'
 import { Link } from 'react-router-dom'
-import { Badge, Button, Card } from 'react-bootstrap'
+import { Accordion, Badge, Button, Card } from 'react-bootstrap'
 import Notes from '../../assets/Notes'
-
+// import AccordionContext from 'react-bootstrap/AccordionContext';
 const MyNotes = () => {
   const deleteNote=(id)=>{
     // window.confirm will give a dialog box with OK and cancel
@@ -25,6 +25,8 @@ const MyNotes = () => {
         {
           Notes.map((item)=>{
          return(
+          <Accordion defaultActiveKey={['0']}>
+            <Accordion.Item eventKey='0'>
          <Card style={{margin:10}} key={item.id}>
             <Card.Header style={{display:"flex"}}>
               <span
@@ -35,14 +37,19 @@ const MyNotes = () => {
                 cursor:'pointer',
                 alignSelf:'center',
                 fontSize:18,
-              }}>{item.title}</span>
+              }}>
+               {/* {item.title} */}
+               <Accordion.Button as={Card.Text} variant='link'>{item.title}</Accordion.Button>
+                {/* <CustomToggle eventKey='0'>{item.title}</CustomToggle> */}
+              </span>
                  <div>
                    <Button href={`/notes/${item.id}`}>Edit</Button>
                     <Button variant='danger' className='ml-2 mr-2' onClick={()=>deleteNote(item.id)}>Delete</Button>
                 </div>
               </Card.Header>
+              <Accordion.Collapse eventKey='0'> 
                 <Card.Body>
-                <h4><Badge bg='success'>Category-{item.category}</Badge></h4>
+                <h4><Badge bg='success' text='light'>Category-{item.category}</Badge></h4>
                   <blockquote className="blockquote mb-0">
                   <p>
                 {' '}{item.content}{' '}
@@ -52,7 +59,10 @@ const MyNotes = () => {
                 </footer>
                 </blockquote>
                  </Card.Body>
+              </Accordion.Collapse>
           </Card>
+          </Accordion.Item>
+          </Accordion>
          )
           })
         }
