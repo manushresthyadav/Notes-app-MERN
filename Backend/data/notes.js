@@ -1,4 +1,4 @@
-const notes = [
+const notes= [
     {
       _id: "1",
       title: "Day 1 of college",

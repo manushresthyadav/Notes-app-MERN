@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MainScreen from '../../components/MainScreen'
 import { Link } from 'react-router-dom'
 import { Accordion, Badge, Button, Card } from 'react-bootstrap'
-import Notes from '../../assets/Notes'
+
+import axios from 'axios'
 // import AccordionContext from 'react-bootstrap/AccordionContext';
 const MyNotes = () => {
+  const [notes,setNotes]=useState([]);
   const deleteNote=(id)=>{
     // window.confirm will give a dialog box with OK and cancel
     if(window.confirm('Are you sure you want to delete this note')){
@@ -15,6 +17,15 @@ const MyNotes = () => {
       // do nothing 
     }
   }
+  const fetchNotes=async()=>{
+    const {data}=await axios.get('http://localhost:5000/api/notes')
+    // console.log(data)
+    setNotes(data);
+  }
+  console.log(notes)
+  useEffect(()=>{
+    fetchNotes()
+  },[])
   return (
     <MainScreen title='Welcome back user'>
         <Link to='/createnote'>
@@ -23,9 +34,9 @@ const MyNotes = () => {
         </Button>
         </Link>
         {
-          Notes.map((item)=>{
+          notes.map((item)=>{
          return(
-          <Accordion defaultActiveKey={['0']}>
+          <Accordion defaultActiveKey={['0']} key={item.id}>
             <Accordion.Item eventKey='0'>
          <Card style={{margin:10}} key={item.id}>
             <Card.Header style={{display:"flex"}}>
