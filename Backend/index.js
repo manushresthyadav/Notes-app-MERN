@@ -5,10 +5,12 @@ const bodyParser=require('body-parser')
 const cors=require('cors')
 const connectDb = require('./config/db.js')
 const app=express()
+const userRoutes=require('./routes/userRoutes.js')
 dotenv.config();
 //db
 connectDb()
-
+//to accept json data 
+app.use(express.json())
 //middlewares
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -22,11 +24,12 @@ app.get('/',(req,res)=>{
 app.get('/api/notes',(req,res)=>{
 res.json(notes)
 })
-app.get('/api/notes/:id',(req,res)=>{
-    const note=notes.find((n)=>n._id===req.params.id)
-    // console.log(req.params)
-    res.json(note)
-})
+// app.get('/api/notes/:id',(req,res)=>{
+//     const note=notes.find((n)=>n._id===req.params.id)
+//     // console.log(req.params)
+//     res.json(note)
+// })
+app.use('/api/users',userRoutes)
 // creating server 
 const PORT=process.env.PORT || 5000;
 app.listen(PORT,console.log(`server started at PORT ${PORT}`))
