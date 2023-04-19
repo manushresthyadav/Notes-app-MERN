@@ -3,8 +3,12 @@ const dotenv=require('dotenv')
 const notes=require('./data/notes.js')
 const bodyParser=require('body-parser')
 const cors=require('cors')
+const connectDb = require('./config/db.js')
 const app=express()
 dotenv.config();
+//db
+connectDb()
+
 //middlewares
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
