@@ -30,6 +30,7 @@ const userSchema=mongoose.Schema(
         timestamps:true,
     }
 )
+// encrypting password before saving in db
 userSchema.pre('save',async function(next){
     if(!this.isModified('password')){
         next()
@@ -37,6 +38,9 @@ userSchema.pre('save',async function(next){
      const salt=await bcrypt.genSalt(10)
      this.password=await bcrypt.hash(this.password,salt)
 })
-
+// login 
+userSchema.methods.matchPassword=async function(enteredPassword){
+      return await bcrypt.compare(enteredPassword,this.password)
+}
 const user=mongoose.model('user',userSchema)
 module.exports=user
