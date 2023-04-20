@@ -6,6 +6,7 @@ const cors=require('cors')
 const connectDb = require('./config/db.js')
 const app=express()
 const userRoutes=require('./routes/userRoutes.js')
+const { notFound, errorHandler } = require('./middlewares/ErrorHandlers.js')
 dotenv.config();
 //db
 connectDb()
@@ -30,6 +31,8 @@ res.json(notes)
 //     res.json(note)
 // })
 app.use('/api/users',userRoutes)
+app.use(notFound)
+app.use(errorHandler)
 // creating server 
 const PORT=process.env.PORT || 5000;
 app.listen(PORT,console.log(`server started at PORT ${PORT}`))
