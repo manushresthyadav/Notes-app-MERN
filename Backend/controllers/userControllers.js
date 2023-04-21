@@ -1,5 +1,6 @@
 const asyncHandler=require('express-async-handler')
-const user=require('../models/userModel')
+const user=require('../models/userModel');
+const generateToken = require('../utils/generateToken');
 const registerUser=asyncHandler(async(req,res)=>{
     const {name,email,password,pic}=req.body;
     //already exists
@@ -17,7 +18,8 @@ const registerUser=asyncHandler(async(req,res)=>{
             name:newUser.name,
             email:newUser.email,
             isAdmin:newUser.admin,
-            pic:newUser.pic
+            pic:newUser.pic,
+            token:generateToken(newUser.id)
          })
     }
     else{
@@ -37,7 +39,8 @@ const authUser=asyncHandler(async(req,res)=>{
             name:userExists.name,
             email:userExists.email,
             isAdmin:userExists.isAdmin,
-            pic:userExists.pic
+            pic:userExists.pic,
+            token:generateToken(userExists.id),
         })
     }
     else{
