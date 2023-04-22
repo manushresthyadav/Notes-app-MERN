@@ -21,7 +21,7 @@ const submitHandler=async(e)=>{
       }
     }
     // setLoading(true)
-    const {data}=await axios.post('/api/users/login',{email,pass},config)
+    const {data}=await axios.post('http://localhost:5000/api/users/login',{email,pass},config)
     console.log(data)
     localStorage.setItem('userInfo',JSON.stringify(data))
     setLoading(false)
