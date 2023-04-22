@@ -8,7 +8,7 @@ import ErrorMessage from '../../components/ErrorMessage'
 
 const LoginScreen = () => {
 const [email,setEmail]=useState('')
-const [pass,setPass]=useState('')
+const [password,setPassword]=useState('')
 const [err,setErr]=useState('')
 const [loading,setLoading]=useState(false)
 const submitHandler=async(e)=>{
@@ -21,7 +21,7 @@ const submitHandler=async(e)=>{
       }
     }
     // setLoading(true)
-    const {data}=await axios.post('http://localhost:5000/api/users/login',{email,pass},config)
+    const {data}=await axios.post('http://localhost:5000/api/users/login',{email,password},config)
     console.log(data)
     localStorage.setItem('userInfo',JSON.stringify(data))
     setLoading(false)
@@ -43,7 +43,7 @@ const submitHandler=async(e)=>{
           </Form.Group>
           <Form.Group controlId='formBasicPassword'>
             <Form.Label>Password</Form.Label>
-            <Form.Control type='password' placeholder='Enter password' value={pass} onChange={(e)=>setPass(e.target.value)}/>
+            <Form.Control type='password' placeholder='Enter password' value={password} onChange={(e)=>setPassword(e.target.value)}/>
           </Form.Group>
           <Button variant='primary' type='submit' className='my-3'>Submit</Button>
         </Form>
