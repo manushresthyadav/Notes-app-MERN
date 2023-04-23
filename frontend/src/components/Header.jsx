@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Navbar,Nav, NavDropdown, Form, FormControl, Container, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 const Header = () => {
+  const [check,setCheck]=useState(false)
+  // const history=useHistory()
   return (
     <div>
      <Navbar bg="primary" expand="lg" variant='dark'>
@@ -29,7 +31,12 @@ const Header = () => {
             <NavDropdown title="shobhnik" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">My Profile</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
+              <NavDropdown.Item onClick={()=>{
+                localStorage.removeItem('userInfo')
+                // history.push('/')
+                setCheck(true)
+              }}>{check &&(<Navigate to='/'/>) }
+                
                 Logout
               </NavDropdown.Item>
             </NavDropdown>
