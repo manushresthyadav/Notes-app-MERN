@@ -1,9 +1,19 @@
 import React, { useState } from 'react'
 import { Navbar,Nav, NavDropdown, Form, FormControl, Container, Button } from 'react-bootstrap'
-import { Link, Navigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { logout } from '../actions/UserActions'
 const Header = () => {
   const [check,setCheck]=useState(false)
   // const history=useHistory()
+  const dispatch=useDispatch()
+  const userLogin=useSelector((state)=>state.userLogin)
+  const {userInfo}=userLogin
+  const navigate=useNavigate()
+  const logoutHandler=()=>{
+    dispatch(logout())
+    navigate('/')
+  }
   return (
     <div>
      <Navbar bg="primary" expand="lg" variant='dark'>
@@ -31,12 +41,7 @@ const Header = () => {
             <NavDropdown title="shobhnik" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">My Profile</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item onClick={()=>{
-                localStorage.removeItem('userInfo')
-                // history.push('/')
-                setCheck(true)
-              }}>{check &&(<Navigate to='/'/>) }
-                
+              <NavDropdown.Item onClick={logoutHandler}>
                 Logout
               </NavDropdown.Item>
             </NavDropdown>
