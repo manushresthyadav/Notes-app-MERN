@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MainScreen from '../../components/MainScreen'
 import { Button, Form } from 'react-bootstrap'
 import axios from 'axios'
 import ErrorMessage from '../../components/ErrorMessage'
 import Loading from '../../components/Loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { register } from '../../actions/UserActions'
+import { useNavigate } from 'react-router-dom'
 
 const RegisterScreen = () => {
   const [email,setEmail]=useState('')
@@ -13,30 +16,23 @@ const RegisterScreen = () => {
     const [confirmPass,setConfirmPass]=useState('')
     const [message,setMessage]=useState(null)
     const [picMessage,setPicMessage]=useState(null)
-    const [err,setErr]=useState(false)
-    const[loading,setLoading]=useState(false)
+   const dispatch=useDispatch()
+   const userRegister=useSelector(state=>state.userRegister)
+   const {loading,error,userInfo}=userRegister 
+    const navigate=useNavigate()
+    useEffect(()=>{
+      if(userInfo){
+        navigate('/mynotes')
+      }
+    },[userInfo])
+
     const submitHandler=async(e)=>{
       e.preventDefault()
-      if(password!=confirmPass){
+      if(password!==confirmPass){
         setMessage('Passwords do not match!')
       }
       else{
-        setMessage(null)
-        try{
-            const config={
-              headers:{
-                "Content-type":"application/json"
-              }
-            }
-            setLoading(true)
-            const {data}=await axios.post('http://localhost:5000/api/users',{name,email,pic,password},config)
-            console.log(data)
-            setLoading(false)
-            localStorage.setItem('userInfo',JSON.stringify(data))
-        }
-        catch(error){
-            setErr(error.response.data.message)
-        }
+         dispatch(register(name,email,password,pic))
       }
     }
     const postDetails=(pics)=>{
@@ -68,7 +64,7 @@ const RegisterScreen = () => {
   return (
     <MainScreen title='REGISTER'>
       <div className='loginContainer'>
-        {err && <ErrorMessage variant='danger'>{err}</ErrorMessage>}
+        {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
         {message && <ErrorMessage variant='danger'>{message}</ErrorMessage>}
         {loading && <Loading/> }
         <Form onSubmit={submitHandler}>
