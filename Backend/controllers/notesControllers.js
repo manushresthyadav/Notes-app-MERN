@@ -5,6 +5,6 @@ const getNotes=asyncHandler(async(req,res)=>{
      res.json(notes)
 })
 const createNotes=asyncHandler(async(req,res)=>{
-
+     const note=await note.create()
 })
 module.exports={getNotes,createNotes}
