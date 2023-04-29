@@ -4,7 +4,7 @@ const {createNotes} = require('../controllers/notesControllers')
 const { protect } = require('../middlewares/authMiddleware')
 const router=express.Router()
 router.route('/').get(protect,getNotes)
-router.route('/create').post(createNotes)
+router.route('/create').post(protect,createNotes)
 // update one single note 
 // router.route('/:id').get().put().delete()  
 
