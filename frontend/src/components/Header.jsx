@@ -14,6 +14,7 @@ const Header = () => {
     dispatch(logout())
     navigate('/')
   }
+
   return (
     <div>
      <Navbar bg="primary" expand="lg" variant='dark'>
@@ -38,7 +39,7 @@ const Header = () => {
             navbarScroll
           >
             <Nav.Link href="/mynotes"><Link to='/mynotes'>My Notes</Link></Nav.Link>
-            <NavDropdown title="shobhnik" id="navbarScrollingDropdown">
+            <NavDropdown title={`${userInfo?userInfo.name:'User'}`} id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">My Profile</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={logoutHandler}>

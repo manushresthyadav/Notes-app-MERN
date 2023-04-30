@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import MainScreen from '../../components/MainScreen'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Accordion, Badge, Button, Card } from 'react-bootstrap'
 
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { listNotes } from '../../actions/NotesActions'
+import ErrorMessage from '../../components/ErrorMessage'
+import Loading from '../../components/Loading'
 // import AccordionContext from 'react-bootstrap/AccordionContext';
 const MyNotes = () => {
-  const [notes,setNotes]=useState([]);
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
+  const userLogin=useSelector(state=>state.userLogin)
+  const {userInfo}=userLogin
+  const noteList=useSelector(state=>state.noteList)
+  const {loading,error,notes}=noteList
+  // const [notes,setNotes]=useState([]);
   const deleteNote=(id)=>{
     // window.confirm will give a dialog box with OK and cancel
     if(window.confirm('Are you sure you want to delete this note')){
@@ -17,24 +27,23 @@ const MyNotes = () => {
       // do nothing 
     }
   }
-  const fetchNotes=async()=>{
-    const {data}=await axios.get('http://localhost:5000/api/notes')
-    // console.log(data)
-    setNotes(data);
-  }
   // console.log(notes)
   useEffect(()=>{
-    fetchNotes()
-  },[])
+    dispatch(listNotes())
+    if(!userInfo){
+      navigate('/')
+    }
+  },[dispatch])
   return (
-    <MainScreen title='Welcome back user'>
+    <MainScreen title={`Welocme back ${userInfo.name}`}>
         <Link to='/createnote'>
         <Button style={{marginLeft:10,marginBottom:6}} size='lg'>
             Create a new note
         </Button>
         </Link>
-        {
-          notes.map((item)=>{
+        {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
+        {loading && <Loading/>}
+        { notes?.map((item)=>{
          return(
           <Accordion defaultActiveKey={['0']} key={item.id}>
             <Accordion.Item eventKey='0'>
@@ -66,7 +75,10 @@ const MyNotes = () => {
                 {' '}{item.content}{' '}
                 </p>
                 <footer className="blockquote-footer">
-                  Created on date-
+                  Created on {" "}
+                  <cite title='source-title'>
+                    {item.createdAt.substring(0,10)}
+                  </cite>
                 </footer>
                 </blockquote>
                  </Card.Body>
