@@ -65,7 +65,8 @@ const MyNotes = () => {
                 {/* <CustomToggle eventKey='0'>{item.title}</CustomToggle> */}
               </span>
                  <div>
-                   <Button href={`/notes/${item.id}`}>Edit</Button>
+                
+                   <Button href={`/note/${item._id}`}>Edit</Button>
                     <Button variant='danger' className='ml-2 mr-2' onClick={()=>deleteNote(item.id)}>Delete</Button>
                 </div>
               </Card.Header>

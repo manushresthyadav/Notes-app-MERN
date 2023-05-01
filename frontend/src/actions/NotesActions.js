@@ -63,3 +63,37 @@ export const createNotes=(title,content,category)=>async(dispatch,getState)=>{
             })
     }
 }
+
+export const updateNotes=(id,title,content,category)=>async(dispatch,getState)=>{
+    try{
+        dispatch({
+            type:'NOTE_UPDATE_REQUEST',
+        })
+        // getstate will provide the current state of userInfo in userLogin  
+        const {
+            userLogin:{userInfo}
+        }=getState()
+            const config={
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${userInfo.token}`
+                }
+            }
+            const {data}=await axios.put(`http://localhost:5000/api/notes/${id}`,{title,content,category},config) 
+            console.log(data)
+            dispatch({
+                type:'NOTE_UPDATE_SUCCESS',
+                payload:data,
+            })
+    }
+    catch(error){
+            const message=error.response && error.response.data.message
+            ?error.response.data.message
+            :error.message
+            dispatch({
+                type:'NOTE_UPDATE_FAIL',
+                payload:message
+            })
+    }
+}
+
