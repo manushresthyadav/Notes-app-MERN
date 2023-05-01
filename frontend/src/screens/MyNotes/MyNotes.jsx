@@ -5,28 +5,28 @@ import { Accordion, Badge, Button, Card } from 'react-bootstrap'
 
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { listNotes } from '../../actions/NotesActions'
+import { deleteNotes, listNotes } from '../../actions/NotesActions'
 import ErrorMessage from '../../components/ErrorMessage'
 import Loading from '../../components/Loading'
 // import AccordionContext from 'react-bootstrap/AccordionContext';
-const MyNotes = () => {
+const MyNotes = ({search}) => {
   const dispatch=useDispatch()
   const navigate=useNavigate()
   const userLogin=useSelector(state=>state.userLogin)
   const {userInfo}=userLogin
   const noteList=useSelector(state=>state.noteList)
   const {loading,error,notes}=noteList
+  const noteUpdate=useSelector(state=>state.noteUpdate)
+  const {success:successUpdate}=noteUpdate
   const noteCreate=useSelector(state=>state.noteCreate)
-  const {success}=noteCreate
+  const {success:successCreate}=noteCreate
+  const noteDelete=useSelector(state=>state.noteDelete)
+  const {loading:loadingDelete,error:errorDelete,success:successDelete}=noteDelete
   // const [notes,setNotes]=useState([]);
   const deleteNote=(id)=>{
     // window.confirm will give a dialog box with OK and cancel
     if(window.confirm('Are you sure you want to delete this note')){
-
-    }
-    else{
-      // user clicked cancel 
-      // do nothing 
+        dispatch(deleteNotes(id))
     }
   }
   // console.log(notes)
@@ -35,7 +35,7 @@ const MyNotes = () => {
     if(!userInfo){
       navigate('/')
     }
-  },[success,userInfo])
+  },[successCreate,userInfo,successDelete,successUpdate,dispatch])
   return (
     <MainScreen title={`Welocme back ${userInfo.name}`}>
         <Link to='/createNote'>
@@ -43,9 +43,11 @@ const MyNotes = () => {
             Create a new note
         </Button>
         </Link>
+        {errorDelete && <ErrorMessage variant='danger'>{errorDelete}</ErrorMessage>}
+        {loadingDelete && <Loading/>}
         {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
         {loading && <Loading/>}
-        { notes?.reverse().map((item)=>{
+        { notes?.reverse().filter(filteredNote=>(filteredNote.title.toLowerCase().includes(search.toLowerCase()))).map((item)=>{
          return(
           <Accordion defaultActiveKey={['0']} key={item.id}>
             <Accordion.Item eventKey='0'>
@@ -67,7 +69,7 @@ const MyNotes = () => {
                  <div>
                 
                    <Button href={`/note/${item._id}`}>Edit</Button>
-                    <Button variant='danger' className='ml-2 mr-2' onClick={()=>deleteNote(item.id)}>Delete</Button>
+                    <Button variant='danger' className='ml-2 mr-2' onClick={()=>deleteNote(item._id)}>Delete</Button>
                 </div>
               </Card.Header>
               <Accordion.Collapse eventKey='0'> 

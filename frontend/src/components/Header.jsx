@@ -3,7 +3,7 @@ import { Navbar,Nav, NavDropdown, Form, FormControl, Container, Button } from 'r
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { logout } from '../actions/UserActions'
-const Header = () => {
+const Header = ({setSearch}) => {
   const [check,setCheck]=useState(false)
   // const history=useHistory()
   const dispatch=useDispatch()
@@ -29,6 +29,7 @@ const Header = () => {
               placeholder="Search"
               className="me-2"
               aria-label="Search"
+              onChange={(e)=>setSearch(e.target.value)}
             />
            
           </Form>

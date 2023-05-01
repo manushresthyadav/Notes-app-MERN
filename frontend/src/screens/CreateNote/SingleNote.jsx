@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ErrorMessage from "../../components/ErrorMessage";
 import Loading from "../../components/Loading";
 import ReactMarkdown from "react-markdown";
-import { updateNotes } from "../../actions/NotesActions";
+import { deleteNotes, updateNotes } from "../../actions/NotesActions";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
@@ -20,7 +20,15 @@ function SingleNote({ match, history }) {
     const dispatch=useDispatch()
     const noteUpdate=useSelector(state=>state.noteUpdate)
     const {error,loading,success}=noteUpdate
+    const noteDelete=useSelector(state=>state.noteDelete)
+    const {errror:errorDelete,loading:loadingDelete}=noteDelete
     const {id}=useParams()
+    const deleteHandler=(id)=>{
+        if(window.confirm('Are you sure you want to delete this note?')){
+          dispatch(deleteNotes(id))
+        }
+        navigate('/mynotes')
+    }
     useEffect(()=>{
       const fetching=async()=>{
         const {data}=await axios.get(`http://localhost:5000/api/notes/${id}`)
@@ -51,11 +59,11 @@ function SingleNote({ match, history }) {
         <Card.Header>Edit your Note</Card.Header>
         <Card.Body>
           <Form onSubmit={updateHandler}>
-            {/* {loadingDelete && <Loading />} */}
+            {loadingDelete && <Loading />}
             {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-            {/* {errorDelete && ( */}
-              {/* <ErrorMessage variant="danger">{errorDelete}</ErrorMessage> */}
-            {/* )} */}
+            {errorDelete && (
+              <ErrorMessage variant="danger">{errorDelete}</ErrorMessage>
+             )}
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
               <Form.Control
@@ -101,7 +109,7 @@ function SingleNote({ match, history }) {
             <Button
               className="mx-2"
               variant="danger"
-            //   onClick={() => deleteHandler(match.params.id)}
+              onClick={()=>deleteHandler(id)}
             >
               Delete Note
             </Button>

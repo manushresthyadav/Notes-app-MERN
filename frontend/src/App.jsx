@@ -10,16 +10,17 @@ import RegisterScreen from './screens/RegisterScreen/RegisterScreen'
 import CreateNote from './screens/CreateNote/CreateNote'
 import SingleNote from './screens/CreateNote/SingleNote'
 function App() {
-
+const [search,setSearch]=useState('')
+// console.log(search)
   return (
   <div>
-    <Header/>
+    <Header setSearch={setSearch}/>
       <main>
         <Routes>
         <Route path='/' element={<LandingPage/>}/>
         <Route path='/login' element={<LoginScreen/>}/>
         <Route path='/register' element={<RegisterScreen/>}/>
-        <Route path='/mynotes' element={<MyNotes/>} />
+        <Route path='/mynotes' element={<MyNotes search={search} />} />
         <Route path='/createNote' element={<CreateNote/>}/>
         <Route path='/note/:id' element={<SingleNote/>} exact />
         </Routes>
