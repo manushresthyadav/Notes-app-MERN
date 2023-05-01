@@ -16,6 +16,8 @@ const MyNotes = () => {
   const {userInfo}=userLogin
   const noteList=useSelector(state=>state.noteList)
   const {loading,error,notes}=noteList
+  const noteCreate=useSelector(state=>state.noteCreate)
+  const {success}=noteCreate
   // const [notes,setNotes]=useState([]);
   const deleteNote=(id)=>{
     // window.confirm will give a dialog box with OK and cancel
@@ -33,17 +35,17 @@ const MyNotes = () => {
     if(!userInfo){
       navigate('/')
     }
-  },[dispatch])
+  },[success,userInfo])
   return (
     <MainScreen title={`Welocme back ${userInfo.name}`}>
-        <Link to='/createnote'>
+        <Link to='/createNote'>
         <Button style={{marginLeft:10,marginBottom:6}} size='lg'>
             Create a new note
         </Button>
         </Link>
         {error && <ErrorMessage variant='danger'>{error}</ErrorMessage>}
         {loading && <Loading/>}
-        { notes?.map((item)=>{
+        { notes?.reverse().map((item)=>{
          return(
           <Accordion defaultActiveKey={['0']} key={item.id}>
             <Accordion.Item eventKey='0'>
