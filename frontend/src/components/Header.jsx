@@ -34,21 +34,22 @@ const Header = ({setSearch}) => {
            
           </Form>
             </Nav>
-          <Nav
+            {userInfo ? (<Nav
             className="me-auto my-2 my-lg-0 mr-auto"
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
             <Nav.Link href="/mynotes"><Link to='/mynotes'>My Notes</Link></Nav.Link>
-            <NavDropdown title={`${userInfo?userInfo.name:'User'}`} id="navbarScrollingDropdown">
+            <NavDropdown title={`${userInfo && userInfo.name}`} id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">My Profile</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={logoutHandler}>
                 Logout
               </NavDropdown.Item>
             </NavDropdown>
-           
-          </Nav>
+          </Nav>)
+  :<Nav><Nav.Link href="/mynotes"><Link to='/login'>Login</Link></Nav.Link></Nav>  
+  } 
           
         </Navbar.Collapse>
       </Container>
