@@ -37,7 +37,7 @@ const MyNotes = ({search}) => {
     }
   },[successCreate,userInfo,successDelete,successUpdate,dispatch])
   return (
-    <MainScreen title={`Welocme back ${userInfo.name}`}>
+    <MainScreen title={`Welcome back ${userInfo && userInfo.name}`}>
         <Link to='/createNote'>
         <Button style={{marginLeft:10,marginBottom:6}} size='lg'>
             Create a new note
