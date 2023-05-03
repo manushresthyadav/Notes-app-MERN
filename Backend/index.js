@@ -8,6 +8,7 @@ const app=express()
 const notesRoutes=require('./routes/notesRoutes.js')
 const userRoutes=require('./routes/userRoutes.js')
 const { notFound, errorHandler } = require('./middlewares/ErrorHandlers.js')
+const path=require('path')
 dotenv.config();
 //db
 connectDb()
@@ -20,9 +21,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors())
 
-// app.get('/',(req,res)=>{
-    // res.send('Success')
-// })/
 // app.get('/api/notes',(req,res)=>{
 // res.json(notes)
 // })
@@ -35,6 +33,7 @@ app.use(cors())
 app.use('/api/users',userRoutes)
 //notes route-crud
 app.use('/api/notes',notesRoutes)
+
 app.use(notFound)
 app.use(errorHandler)
 // creating server 
